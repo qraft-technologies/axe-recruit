@@ -50,12 +50,13 @@ class BaseOrderSimulation:
         order_books: 호가창 정보 (5개의 frame): reset 에서와 같음
         result_this_step: 이번 step 의 action 의 결과로 얻어진 체결정보 {가격 : 수량} 구조
         result_all : 에피소드 시작부터 지금까지 이루어진 모든 체결 정보
+        passed_time: 지난 observation 부터 지금까지 경과한 시간
         """
         assert self.mission_buy is not None and self.left_step != 0, "reset first!"
         assert len(actions) == 4, "4개의 integer 가 action 으로 제공되어야합니다. 각각 1호가주문, 2호가주문, 3호가주문, 시장가주문 입니다."
-        order_books, left_step, result_this_step, result_all = self.gym.step(*actions)
+        order_books, left_step, result_this_step, result_all, passed_time = self.gym.step(*actions)
         self.left_step = left_step
-        return [dict2series(o) for o in order_books], dict2series(result_this_step), dict2series(result_all)
+        return [dict2series(o) for o in order_books], dict2series(result_this_step), dict2series(result_all), passed_time
 
 
 class OrderSimulation1(BaseOrderSimulation):
